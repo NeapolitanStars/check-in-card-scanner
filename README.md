@@ -1,2 +1,2 @@
 # check-in-card-scanner
-woah
+description to be announced
