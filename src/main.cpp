@@ -13,9 +13,15 @@ char password[] = "neapolitan"; // Yes you may have my hotspot password
 int led_pin = 2;
 int ss_pin = 5;  // For card reader
 int rst_pin = 4; // For card reader
+int rs_pin = 14; // For LCD screen
+int E_pin = 27; // For LCD screen
+int D4_pin = 26; // For LCD screen
+int D5_pin = 25; // For LCD screen
+int D6_pin = 33; // For LCD screen
+int D7_pin = 32; // For LCD screen
 
 // Initialize LCD screen
-LiquidCrystal lcd(14, 27, 26, 25, 33, 32); // RS, E, D4, D5, D6, D7
+LiquidCrystal lcd(rs_pin, E_pin, D4_pin, D5_pin, D6_pin, D7_pin); // RS, E, D4, D5, D6, D7
 
 // Initialize mfrc522, which allows reading/writing to RFID tags
 MFRC522 rfid(ss_pin, rst_pin);
