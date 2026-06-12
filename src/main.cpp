@@ -83,7 +83,7 @@ void loop()
 
   Serial.println("Card ID: " + cardID);
   lcd.clear();
-  lcd.print("Card Found!");
+  lcd.print("Processing...");
   delay(1000);
   lcd.clear();
 
