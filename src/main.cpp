@@ -11,17 +11,17 @@ char password[] = "neapolitan"; // Yes you may have my hotspot password
 
 // Initialize pins
 int led_pin = 2;
-int ss_pin = 5; // For card reader
+int ss_pin = 5;  // For card reader
 int rst_pin = 4; // For card reader
 int rs_pin = 14; // For LCD screen
-int E_pin = 27; // For LCD screen
+int E_pin = 27;  // For LCD screen
 int D4_pin = 26; // For LCD screen
 int D5_pin = 25; // For LCD screen
 int D6_pin = 33; // For LCD screen
 int D7_pin = 32; // For LCD screen
 
 // URL of the Google Apps Script
-String scriptURL = "https://script.google.com/a/macros/tdsb.ca/s/AKfycbwjmR34aTe2jYj5n4pnsGMRC6IK1Iv4RZ9q91-aEwP9lT7KfuLQGpbVzibZf72NyQR82w/exec";
+String scriptURL = "https://script.google.com/macros/s/AKfycbwSb80KNG5SlXwEkUxk2ShaanLo-9TH9o9o5RNbp_TRhhH38lSQqRorXvlZqClvzm1bkA/exec";
 // Initialize LCD screen
 LiquidCrystal lcd(rs_pin, E_pin, D4_pin, D5_pin, D6_pin, D7_pin); // RS, E, D4, D5, D6, D7
 
@@ -90,11 +90,14 @@ void loop()
   // Send card ID to Google Apps Script
   HTTPClient http;
   String url = scriptURL + "?cardID=" + cardID;
-  http.begin(url);
 
+  http.begin(url);
+  // Force the HTTP client to follow redirects, so it can properly handle the response from the Google Apps Script
+  http.setFollowRedirects(HTTPC_FORCE_FOLLOW_REDIRECTS);
   // Send the GET request and get the response
   int httpResponseCode = http.GET();
   String response = http.getString();
+  response.trim();
 
   // Print the response to the Serial Monitor and LCD screen
   if (response == "CHECKED IN")
@@ -109,7 +112,7 @@ void loop()
   {
     lcd.print("Error!");
   }
-  
+
   delay(1000);
 }
 
