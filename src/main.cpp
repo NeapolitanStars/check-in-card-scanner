@@ -11,7 +11,7 @@ char password[] = "neapolitan"; // Yes you may have my hotspot password
 
 // Initialize pins
 int led_pin = 2;
-int ss_pin = 5;  // For card reader
+int ss_pin = 5; // For card reader
 int rst_pin = 4; // For card reader
 int rs_pin = 14; // For LCD screen
 int E_pin = 27; // For LCD screen
@@ -20,6 +20,8 @@ int D5_pin = 25; // For LCD screen
 int D6_pin = 33; // For LCD screen
 int D7_pin = 32; // For LCD screen
 
+// URL of the Google Apps Script
+String scriptURL = "https://script.google.com/a/macros/tdsb.ca/s/AKfycbwjmR34aTe2jYj5n4pnsGMRC6IK1Iv4RZ9q91-aEwP9lT7KfuLQGpbVzibZf72NyQR82w/exec";
 // Initialize LCD screen
 LiquidCrystal lcd(rs_pin, E_pin, D4_pin, D5_pin, D6_pin, D7_pin); // RS, E, D4, D5, D6, D7
 
@@ -36,7 +38,7 @@ void setup()
   rfid.PCD_Init(); // Initialize the RFID reader
 
   // Connects the ESP-32 to Wi-Fi and prints connection status to Serial Monitor and LCD screen
-  WiFi.begin(ssid, password); 
+  WiFi.begin(ssid, password);
   Serial.println("Connecting to WiFi...");
   lcd.print("Connecting to");
   lcd.setCursor(0, 1);
@@ -49,7 +51,7 @@ void setup()
     Serial.println("Still connecting...");
   }
 
-  // Once connected, turn on the built-in LED and print to Serial Monitor and LCD screen
+  // Turn on the built-in LED and print to Serial Monitor and LCD screen
   digitalWrite(led_pin, HIGH);
   Serial.println("Connected!");
   lcd.clear();
@@ -75,7 +77,7 @@ void loop()
   {
     delay(50);
   }
-  
+
   // Read the card's UID and print it to the Serial Monitor
   String cardID = readCard();
 
@@ -84,25 +86,30 @@ void loop()
   lcd.print("Card Found!");
   delay(1000);
   lcd.clear();
-  
 
   // Send card ID to Google Apps Script
   HTTPClient http;
+  String url = scriptURL + "?cardID=" + cardID;
+  http.begin(url);
 
-  // add code to get status
+  // Send the GET request and get the response
+  int httpResponseCode = http.GET();
+  String response = http.getString();
 
-  boolean checkedIn = 0;
-
-  if (checkedIn == 0)
+  // Print the response to the Serial Monitor and LCD screen
+  if (response == "CHECKED IN")
   {
     lcd.print("Checked-in!");
-    // add code to change checked in status on google sheets
   }
-  else if (checkedIn == 1)
+  else if (response == "CHECKED OUT")
   {
     lcd.print("Checked-out!");
-    // add code to change checked in status on google sheets
   }
+  else
+  {
+    lcd.print("Error!");
+  }
+  
   delay(1000);
 }
 
