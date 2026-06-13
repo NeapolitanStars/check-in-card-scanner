@@ -27,7 +27,7 @@ function doGet(e){
         }
     }
 
-    // If the card ID is not found, add it to the time tracker sheet with the current time and date
+    // If the card ID is not found, add it to the time tracker sheet with a placeholder name.
     if(!found){
         name = "Unknown";
         timeSheet.appendRow([cardID, name]);
