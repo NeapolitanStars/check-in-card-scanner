@@ -84,8 +84,6 @@ void loop()
   Serial.println("Card ID: " + cardID);
   lcd.clear();
   lcd.print("Processing...");
-  delay(1000);
-  lcd.clear();
 
   // Send card ID to Google Apps Script
   HTTPClient http;
@@ -98,6 +96,8 @@ void loop()
   int httpResponseCode = http.GET();
   String response = http.getString();
   response.trim();
+
+  lcd.clear();
 
   // Print the response to the Serial Monitor and LCD screen
   if (response == "CHECKED IN")
